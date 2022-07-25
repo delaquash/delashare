@@ -8,6 +8,7 @@ import userRoutes from "./Routes/user.js";
 import videoRoutes from "./Routes/comment.js";
 import commentRoutes from "./Routes/comment.js";
 import authRoutes from "./Routes/auth.js";
+import cookieParser from "cookie-parser";
 
 
 
@@ -25,7 +26,9 @@ connectDB();
 
 /* A middleware that parses the incoming request body and makes it available as a property on the
 request object. */
-app.use(express.json())
+app.use(express.json());
+app.use(cookieParser());
+
 /* A route handler. */
 app.get('/', (req, res)=> {
     res.send("Welcome and this is surely going to be a completed app")
