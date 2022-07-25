@@ -17,11 +17,16 @@ export const signup= async (req, res, next)=> {
     }
 }
 
-export const signin= async (req, res, next)=> {
-    
+export const signin= async (req, res, next)=> {  
     try {
+        /* Checking if the user exists in the database. */
         const user = await User.findOne({name: req.body.name})
-        if(!user) return next(createError(404, "User not found!!!"));   
+        if(!user) return next(createError(404, "User not found!!!"));  
+        
+        /* Comparing the password that the user entered with the password that is stored in the
+        database. */
+        const isCorrect = await bcrypt.compare(req.body.password, user.name);
+        if(!isCorrect) return next(createError(400, "Wrong credential!!!"))
     } catch (err) {
         next(err)
     }
