@@ -4,7 +4,6 @@ import bcrypt from "bcryptjs";
 import { createError } from "../error.js";
 import jwt from "jsonwebtoken";
 
-
 export const signup= async (req, res, next)=> {
     /* Creating a new user and saving it to the database. */
     try {
@@ -26,10 +25,17 @@ export const signin= async (req, res, next)=> {
         
         /* Comparing the password that the user entered with the password that is stored in the
         database. */
-        const isCorrect = await bcrypt.compare(req.body.password, user.name);
-        if(!isCorrect) return next(createError(400, "Wrong credential!!!"))
+        const isCorrect = await bcrypt.compare(req.body.password, user.password);
+        if(!isCorrect) return next(createError(400, "Wrong credential!!!"));
 
-        const token = jwt.sign({id: user._id}, process.env.JWT_SECRET)
+        /* Creating a token for the user. */
+        const token = jwt.sign({id: user._id}, process.env.JWT_SECRET);
+        const { password, ...others } = user._doc
+        
+        /* Setting the cookie and sending the response. */
+        res.cookie("access_token", token, {
+            httpOnly: true
+        }).status(200).json(others);
     } catch (err) {
         next(err)
     }

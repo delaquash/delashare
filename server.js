@@ -26,8 +26,9 @@ connectDB();
 
 /* A middleware that parses the incoming request body and makes it available as a property on the
 request object. */
-app.use(express.json());
 app.use(cookieParser());
+app.use(express.json());
+
 
 /* A route handler. */
 app.get('/', (req, res)=> {
