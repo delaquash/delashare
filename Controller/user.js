@@ -47,18 +47,30 @@ export const specificUser = (req, res, next)=> {
             
         }
     } else {
+
+    }
+};
+export const subscribeUser = async (req, res, next)=> {
+    try {
+         await User.findById(req.user.id, {
+            /* Pushing the `req.params.id` into the `User` model. */
+            $push : { subscribedUser:req.params.id}
+         })
+
+         await User.findByIdAndUpdate(req.params.id, {
+            $inc: {subscribers : 1}
+         })
+         res.status(200).json("Subscription Successfull!")
+    } catch (error) {
         
     }
 };
-export const subscribeUser = (req, res, next)=> {
+export const unsubcribedUser = async (req, res, next)=> {
     res.send("All is working")
 };
-export const unsubcribedUser = (req, res, next)=> {
+export const  likeUser = async (req, res, next)=> {
     res.send("All is working")
 };
-export const  likeUser = (req, res, next)=> {
-    res.send("All is working")
-};
-export const unlikeUser = (req, res, next)=> {
+export const unlikeUser = async (req, res, next)=> {
     res.send("All is working")
 };
