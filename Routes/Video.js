@@ -3,9 +3,9 @@ import  { addVideo, updateVideo, getVideo, deleteVideo } from '../Controller/vid
 import { verifyToken } from "../verifyToken.js";
 const router = express.Router()
 
-router.get('/', verifyToken, addVideo )
-router.get('/:id', verifyToken, updateVideo )
+router.post('/', verifyToken, addVideo )
+router.put('/:id', verifyToken, updateVideo )
 router.get('/find/:id' , getVideo )
-router.get('/:id', verifyToken, deleteVideo )
+router.delete('/:id', verifyToken, deleteVideo )
 
 export default router; 
