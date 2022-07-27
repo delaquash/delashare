@@ -7,19 +7,19 @@ const router = express.Router();
 // update user
 router.put("/:id", verifyToken, updateUser)
 // delete user
-router.delete("/:id", deleteUser)
+router.delete("/:id",verifyToken, deleteUser)
 // get all user
 router.get("/find", getUser )
 // get specific user
-router.get("/find/:id", specificUser)
+router.get("/find/:id", verifyToken, specificUser)
 // subscribe a user
-router.put("/sub/:id", subscribeUser)
+router.put("/sub/:id", verifyToken, subscribeUser)
 // unsubscribe a user
-router.put("/unsub/:id", unsubcribedUser)
+router.put("/unsub/:id", verifyToken, unsubcribedUser)
 // like a user
-router.put("/like/:videoId", likeUser)
+router.put("/like/:videoId", verifyToken, likeUser)
 // unlike a user
-router.put("/unlike/:videoId", unlikeUser)
+router.put("/unlike/:videoId", verifyToken, unlikeUser)
 
 
 
