@@ -33,13 +33,22 @@ export const deleteUser = async (req, res, next)=> {
 };
 export const getUser = async(req, res, next)=> {
     try {
-        res.send("All is working")
-    } catch (error) {
-        
+        const getUser = await User.find()
+        res.status(200).json(getUser)
+    } catch (err) {
+        next(err)
     }
 };
 export const specificUser = (req, res, next)=> {
-    res.send("All is working")
+    if(req.param.id === req.user.id) {
+        try {
+            
+        } catch (error) {
+            
+        }
+    } else {
+        
+    }
 };
 export const subscribeUser = (req, res, next)=> {
     res.send("All is working")
