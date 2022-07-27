@@ -33,6 +33,7 @@ export const deleteUser = async (req, res, next)=> {
 };
 export const getUser = async(req, res, next)=> {
     try {
+        /* Getting all the users from the database. */
         const getUser = await User.find()
         res.status(200).json(getUser)
     } catch (err) {
@@ -57,6 +58,7 @@ export const subscribeUser = async (req, res, next)=> {
             $push : { subscribedUser:req.params.id}
          })
 
+         /* Incrementing the `subscribers` by 1. */
          await User.findByIdAndUpdate(req.params.id, {
             $inc: {subscribers : 1}
          })
@@ -66,7 +68,20 @@ export const subscribeUser = async (req, res, next)=> {
     }
 };
 export const unsubcribedUser = async (req, res, next)=> {
-    res.send("All is working")
+    try {
+        await User.findById(req.user.id, {
+           /* Removing the `req.params.id` from the `subscribedUser` array. */
+           $pull : { subscribedUser:req.params.id}
+        })
+
+        /* Decrementing the `subscribers` by -1. */
+        await User.findByIdAndUpdate(req.params.id, {
+           $inc: {subscribers : -1}
+        })
+        res.status(200).json("Unsubscribe Successfully!")
+   } catch (err) {
+       next(err);
+   }
 };
 export const  likeUser = async (req, res, next)=> {
     res.send("All is working")
