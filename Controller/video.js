@@ -44,10 +44,31 @@ export const getVideo = async (req, res, next)=> {
 
 export const addView = async(req, res, next)=> {
     try {
+        /* Finding the video by the id and increasing the views by 1. */
         await Video.findByIdAndUpdate(req.params.id, {
             $inc: {views: 1}
         })
         res.status(201).json("Views has been increased successfully!")
+    } catch (err) {
+        next(err)
+    }
+}
+
+export const random= async(req, res, next)=> {
+    try {
+        /* Getting 40 random videos from the database. */
+        const videos = await Video.aggregate([{$sample : { size: 40}}])
+        res.status(200).json(videos)
+    } catch (err) {
+        next(err)
+    }
+}
+
+export const trend = async(req, res, next)=> {
+    try {
+        /* Sorting the videos by the highest views. */
+        const videos = await Video.find().sort({ views: -1})
+        res.status(200).json(videos)
     } catch (err) {
         next(err)
     }
