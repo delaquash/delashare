@@ -5,7 +5,7 @@ import colors from 'colors';
 import morgan from 'morgan';
 import connectDB  from './config/db.js';
 import userRoutes from "./Routes/user.js";
-import videoRoutes from "./Routes/comment.js";
+import videoRoutes from "./Routes/video.js";
 import commentRoutes from "./Routes/comment.js";
 import authRoutes from "./Routes/auth.js";
 import cookieParser from "cookie-parser";
@@ -41,7 +41,7 @@ app.use('/api/auth', authRoutes);
 
 app.use((err, req, res, next) => {
     const status = err.status || 500
-    const message = err.message || "SOmething went wrong"
+    const message = err.message || "Something went wrong"
     return res.status (status).json({
         success: false,
         message,
@@ -52,4 +52,4 @@ app.use((err, req, res, next) => {
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow.bold));
+app.listen(PORT, console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow.underline.bold));
