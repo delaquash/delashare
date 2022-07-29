@@ -2,6 +2,16 @@ import { createError } from "../error.js";
 import User from "../models/User.js";
 
 
+export const addUser = async (req, res, next)=> {
+    const newUser = new User(req.body)
+    try {
+        const addUser = await newUser.save()
+        res.status(200).json(addUser)
+    } catch (err) {
+        next(err)
+    }
+}
+
 export const updateUser = async (req, res, next)=> {
     if(req.params.id === req.user.id){
         try {
@@ -63,13 +73,13 @@ export const subscribeUser = async (req, res, next)=> {
             $inc: {subscribers : 1}
          })
          res.status(200).json("Subscription Successfull!")
-    } catch (error) {
-        
+    } catch (err) {
+        next(err)
     }
 };
 export const unsubcribedUser = async (req, res, next)=> {
     try {
-        await User.findById(req.user.id, {
+        await User.findByIdAndUpdate(req.user.id, {
            /* Removing the `req.params.id` from the `subscribedUser` array. */
            $pull : { subscribedUser:req.params.id}
         })

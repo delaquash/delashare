@@ -1,4 +1,5 @@
 import { createError } from "../error.js";
+import User from "../models/User.js";
 import Video from "../models/Video.js";
 
 export const addVideo = async (req, res, next)=> {
@@ -73,6 +74,25 @@ export const trend = async(req, res, next)=> {
         next(err)
     }
 }
+
+export const sub = async (req, res, next) => {
+    try {
+        const user = await User.findById(req.user.id)
+        const subscribedChannels = await user.subscribedUsers
+
+       /* Getting all the videos from the subscribed channels. */
+        const list =await Promise.all(
+            subscribedChannels.map((channelId) => {
+                return Video.find({userId : channelId })
+            })
+        )
+        res.status(200).json(list.flat().sort((a, b) => b.createdAt - a.createdAt));
+    } catch (err) {
+        next(err)
+        // console.log(err);
+    }
+}
+
 
 export const deleteVideo = async (req, res, next)=> {
     try {
