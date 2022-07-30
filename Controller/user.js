@@ -63,7 +63,7 @@ export const specificUser = (req, res, next)=> {
 };
 export const subscribeUser = async (req, res, next)=> {
     try {
-         await User.findById(req.user.id, {
+         await User.findByIdAndUpdate(req.user.id, {
             /* Pushing the `req.params.id` into the `User` model. */
             $push : { subscribedUser:req.params.id}
          })

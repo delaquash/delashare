@@ -78,18 +78,18 @@ export const trend = async(req, res, next)=> {
 export const sub = async (req, res, next) => {
     try {
         const user = await User.findById(req.user.id)
-        const subscribedChannels = await user.subscribedUsers
+        const subscribedChannels = user.subscribedUsers
 
        /* Getting all the videos from the subscribed channels. */
-        const list =await Promise.all(
-            subscribedChannels.map((channelId) => {
-                return Video.find({userId : channelId })
+        const list = await Promise.all(
+            subscribedChannels.map( async(channelId) => {
+                return await Video.find({userId : channelId });
             })
-        )
+        );
         res.status(200).json(list.flat().sort((a, b) => b.createdAt - a.createdAt));
     } catch (err) {
         next(err)
-        // console.log(err);
+        console.log(err);
     }
 }
 
