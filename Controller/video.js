@@ -16,22 +16,25 @@ export const updateVideo = async (req, res, next)=> {
     try {
        /* Finding the video by the id and assigning it to the variable Video. */
        const video = await Video.findById(req.params.id) 
-        if(!video) return next(createError(404, "Video not found!"))
+        if(!video) return next(createError(404, "Video not found!"));
         if(req.user.id === video.userId){
-                const updatedVideo = await Video.findByIdAndUpdate(req.params.id, {
-                    $set: req.body
-                }, 
-                {
-                    new: true
-                });
-                res.status(201).json(updatedVideo)     
-        } else {
+    
+                const updatedVideo = await Video.findByIdAndUpdate(
+                    req.params.id, 
+                    {
+                        $set: req.body,                   }, 
+                    {
+                        new: true
+                    }
+                );
+                res.status(200).json(updatedVideo)     
+            } else {
             return next(createError(403, "You can update only your video"))
         }
     } catch(err) {
         next(err)
     }
-}
+};
 
 export const getVideo = async (req, res, next)=> {
     try {
