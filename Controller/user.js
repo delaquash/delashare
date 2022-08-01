@@ -106,19 +106,19 @@ export const  likeUser = async (req, res, next)=> {
         next(err)
     }
 };
-// export const unlikeUser = async (req, res, next)=> {
-//     const id = req.user.id;
-//     const videoId = req.params.videoId;
-//     try {
-//         await Video.findByIdAndUpdate(videoId, {
-//             /* Adding the `id` to the `dislikes` array. */
-//             $addToSet: { dislikes: id },
+export const unlikeUser = async (req, res, next)=> {
+    const id = req.user.id;
+    const videoId = req.params.videoId;
+    try {
+        await Video.findByIdAndUpdate(videoId, {
+            /* Adding the `id` to the `dislikes` array. */
+            $addToSet: { dislikes: id },
 
-//             /* Removing the `id` from the `likes` array. */
-//             $pull: {likes: id}
-//         })
-//         res.status(200).json("This video has been disliked!!!")
-//     } catch (err) {
-//         next(err)
-//     }
-// };
+            /* Removing the `id` from the `likes` array. */
+            $pull: {likes: id}
+        })
+        res.status(200).json("This video has been disliked!!!")
+    } catch (err) {
+        next(err)
+    }
+};
