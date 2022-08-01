@@ -94,8 +94,31 @@ export const unsubcribedUser = async (req, res, next)=> {
    }
 };
 export const  likeUser = async (req, res, next)=> {
-    res.send("All is working")
+    const id = req.user.id;
+    const videoId = req.params.videoId;
+    try {
+        await Video.findByIdAndUpdate(videoId, {
+            $addToSet: { likes: id },
+            $pull: {dislikes: id}
+        })
+        res.status(200).json("This video has been liked!!!")
+    } catch (err) {
+        next(err)
+    }
 };
-export const unlikeUser = async (req, res, next)=> {
-    res.send("All is working")
-};
+// export const unlikeUser = async (req, res, next)=> {
+//     const id = req.user.id;
+//     const videoId = req.params.videoId;
+//     try {
+//         await Video.findByIdAndUpdate(videoId, {
+//             /* Adding the `id` to the `dislikes` array. */
+//             $addToSet: { dislikes: id },
+
+//             /* Removing the `id` from the `likes` array. */
+//             $pull: {likes: id}
+//         })
+//         res.status(200).json("This video has been disliked!!!")
+//     } catch (err) {
+//         next(err)
+//     }
+// };
