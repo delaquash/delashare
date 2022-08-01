@@ -57,15 +57,6 @@ export const updateVideo = async (req, res, next) => {
     }
   };
 
-
-
-
-
-
-
-
-
-
 export const getVideo = async (req, res, next)=> {
     try {
         const video = await Video.findById(req.params.id)
@@ -147,9 +138,11 @@ export const deleteVideo = async (req, res, next)=> {
 }
 
 export const tags = async (req, res)=> {
+    /* Splitting the tags by comma. */
     const tags = req.query.tags.split(",");
     // console.log(tags);
     try {
+        /* Finding all the videos that have the tags that are in the tags array. */
         const videos = await Video.find({ tags: {$in: tags}}).limit(20)
         res.status(200).json(videos)
     } catch (err) {
@@ -157,6 +150,14 @@ export const tags = async (req, res)=> {
     }
 };
 
-export const search = (req, res)=> {
-
-}
+export const search = async (req, res)=> {
+    const query= req.query.q;
+    try {
+        const videos = await Video.find({
+            title: {$regex: query, $options: 'i'}
+        }).limit(40) 
+        res.status(200).json(videos)
+    } catch (err) {
+        next(err)
+    }
+};

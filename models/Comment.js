@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
-const Commentchema = new Schema({
+const CommentSchema = new Schema({
     userId : {
         type: String,
         required: true
