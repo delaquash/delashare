@@ -3,7 +3,7 @@ import Comment from '../models/Comment.js';
 import Video from "../models/Video.js"
 
 
-export const addComment = async (req, res)=> {
+export const addComment = async (req, res, next)=> {
     const newComment = new Comment({...req.body, userId: req.user.id})
     try {
         const savedComment =await newComment.save()
@@ -12,7 +12,7 @@ export const addComment = async (req, res)=> {
         next(err)
     }
 };
-export const deleteComment = async (req, res)=> {
+export const deleteComment = async (req, res, next)=> {
     try {
         /* Finding the video by the id and assigning it to the variable Video. */
        const comment = await Comment.findById(req.params.id);
@@ -29,16 +29,16 @@ export const deleteComment = async (req, res)=> {
         next(err)
     }
 };
-export const getComment = async (req, res)=> {
+export const getComment = async (req, res, next)=> {
     try {
-       const comment = await Comment.findById({video: req.params.videoId}) 
+       const comment = await Comment.find({videoId: req.params.videoId}) 
        res.status(200).json(comment)
     } catch (err) {
         next(err)
     }
 };
 
-// export const getComment = async (req, res)=> {
+// export const getComment = async (req, res, next)=> {
 //     try {
 //        const comment = await Comment.find()  
 //        res.status(200).json(comment)
