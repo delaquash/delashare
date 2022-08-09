@@ -10,6 +10,7 @@ import commentRoutes from "./Routes/comment.js";
 import authRoutes from "./Routes/auth.js";
 import cookieParser from "cookie-parser";
 
+import cors from 'cors';
 
 
 /* Creating an instance of the express application. */
@@ -28,7 +29,7 @@ connectDB();
 request object. */
 app.use(cookieParser());
 app.use(express.json());
-
+app.use(cors());
 
 /* A route handler. */
 app.get('/', (req, res)=> {
