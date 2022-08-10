@@ -2,10 +2,9 @@ import React from "react";
 import styled from "styled-components";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
-import VideoCallOutlinedAction from "@mui/icons-material/VideoCallOutlinedAction";
+import VideoCallOutlinedAction from "@mui/icons-material/VideoCallOutlined";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { Avatar } from "@mui/material";
 
 const Container = styled.div`
   position: sticky;
@@ -21,6 +20,21 @@ const Wrapper = styled.div`
   height: 100%;
   padding: 0px 20px;
   position: relative;
+`;
+
+const User = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+  color: ${({ theme }) => theme.text }
+`;
+
+const Avatar = styled.img`
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #999;
 `;
 
 const Search = styled.div`
