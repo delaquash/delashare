@@ -1,4 +1,5 @@
-import React from "react";
+import axios from "axios";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -10,7 +11,7 @@ const Container = styled.div`
   color: ${({ theme }) => theme.text};
 `;
 
-const Wrapper = styled.div`
+const Wrapper = styled.form`
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -64,19 +65,51 @@ const Link = styled.span`
 `;
 
 const SignIn = () => {
+  const [name, setName ] = useState("");
+  const [ email, setEmail ] = useState("");
+  const [ password, setPassword ] = useState("");
+
+  const handleLogin= async(e)=> {
+      e.preventDefault();
+      try {
+        const res = await axios.post("http://localhost:5000/api/auth/signin", {name, password})
+        console.log(res.data);
+      } catch (error) {
+        
+      }
+  }
+
+
   return (
     <Container>
       <Wrapper>
         <Title>Sign in</Title>
         <SubTitle>to continue to DelaTube</SubTitle>
-        <Input placeholder="username" />
-        <Input type="password" placeholder="password" />
-        <Button>Sign in</Button>
+        <Input 
+            placeholder="username" 
+            onChange={(e)=> setName(e.target.value)}
+          />
+        <Input 
+            type="password" 
+            placeholder="password"
+            onChange={(e)=> setPassword(e.target.value)} 
+        />
+        <Button onClick={handleLogin}>Sign in</Button>
         <Title>or</Title>
-        <Input placeholder="username" />
-        <Input placeholder="email" />
-        <Input type="password" placeholder="password" />
-        <Button>Sign up</Button>
+        <Input 
+            placeholder="username"
+            onChange={(e)=>setName(e.target.value)}
+        />
+        <Input 
+            placeholder="email" 
+            onChange={(e)=> setEmail(e.target.value)}
+        />
+        <Input 
+            type="password" 
+            placeholder="password" 
+            onChange={(e)=> setPassword(e.target.value)}
+          />
+        <Button >Sign up</Button>
       </Wrapper>
       <More>
         English(USA)

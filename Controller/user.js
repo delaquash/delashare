@@ -44,23 +44,21 @@ export const deleteUser = async (req, res, next)=> {
 export const getUser = async(req, res, next)=> {
     try {
         /* Getting all the users from the database. */
-        const getUser = await User.find()
+        const getUser = await User.findById(req.params.id)
         res.status(200).json(getUser)
     } catch (err) {
         next(err)
     }
 };
-export const specificUser = (req, res, next)=> {
-    if(req.param.id === req.user.id) {
-        try {
-            
-        } catch (error) {
-            
-        }
-    } else {
 
-    }
-};
+// export const specificUser = (req, res, next)=> {
+//     try {
+        
+//     } catch (err) {
+        
+//     }
+// };
+
 export const subscribeUser = async (req, res, next)=> {
     try {
          await User.findByIdAndUpdate(req.user.id, {
