@@ -1,6 +1,8 @@
 import axios from "axios";
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
+import { loginFail, loginStart, loginSuccess } from "../Redux/userSlice";
 
 const Container = styled.div`
   display: flex;
@@ -68,14 +70,16 @@ const SignIn = () => {
   const [name, setName ] = useState("");
   const [ email, setEmail ] = useState("");
   const [ password, setPassword ] = useState("");
+  const dispatch = useDispatch()
 
   const handleLogin= async(e)=> {
+    dispatch(loginStart())
       e.preventDefault();
       try {
         const res = await axios.post("http://localhost:5000/api/auth/signin", {name, password})
-        console.log(res.data);
+        dispatch(loginSuccess(res.data))
       } catch (error) {
-        
+        dispatch(loginFail())
       }
   }
 
