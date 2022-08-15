@@ -1,4 +1,3 @@
-
 import User from '../models/User.js';
 import bcrypt from "bcryptjs";
 import { createError } from "../error.js";
@@ -43,33 +42,33 @@ export const signin= async (req, res, next)=> {
     }
 }
 
-// export const googleAuth =async(req, res, next) => {
-//     try {
-//       /* Checking if the user exists in the database. If the user exists, it will create a token for
-//       the user and set the cookie. */
-//         const user = await User.findOne({ email: req.body.email})
-//         if(user) {
-//             jwt.sign ({
-//                 id: user._id
-//             }.process.env.JWT_SECRET);
+export const googleAuth =async(req, res, next) => {
+    try {
+      /* Checking if the user exists in the database. If the user exists, it will create a token for
+      the user and set the cookie. */
+        const user = await User.findOne({ email: req.body.email})
+        if(user) {
+            jwt.sign ({
+                id: user._id
+            }.process.env.JWT_SECRET);
 
-//             res.cookie("access_token", token, {
-//                 httpOnly: true
-//             }).status(200).json(user._doc);
-//         } else {
-//             const newUser = new User({
-//                 ...req.body,
-//                 fromGoogle: true
-//             })
-//             const savedUser = newUser.save()
-//             jwt.sign ({
-//                 id: user._id
-//             }.process.env.JWT_SECRET);
-//             res.cookie("access_token", token, {
-//                 httpOnly: true
-//             }).status(200).json(savedUser._doc);
-//         }
-//     } catch (error) {
-        
-//     }
-// } 
+            res.cookie("access_token", token, {
+                httpOnly: true
+            }).status(200).json(user._doc);
+        } else {
+            const newUser = new User({
+                ...req.body,
+                fromGoogle: true
+            })
+            const savedUser = newUser.save()
+            jwt.sign ({
+                id: savedUser._id
+            }.process.env.JWT_SECRET);
+            res.cookie("access_token", token, {
+                httpOnly: true
+            }).status(200).json(savedUser._doc);
+        }
+    } catch (err) {
+        next(err)
+    }
+} 

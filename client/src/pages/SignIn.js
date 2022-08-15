@@ -120,6 +120,7 @@ const SignIn = () => {
         <Button onClick={handleLogin}>Sign in</Button>
         <Title>or</Title>
         <Button onClick={SignInWithGoogle}> Signin With Google </Button>
+        <Title>or</Title>
         <Input 
             placeholder="username"
             onChange={(e)=>setName(e.target.value)}
