@@ -56,6 +56,7 @@ export const googleAuth =async(req, res, next) => {
                 httpOnly: true
             }).status(200).json(user._doc);
         } else {
+            /* Creating a new user and saving it to the database. */
             const newUser = new User({
                 ...req.body,
                 fromGoogle: true

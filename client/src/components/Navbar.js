@@ -82,7 +82,7 @@ const Navbar = () => {
        { currentUser ? (
           <User>
             <VideoCallOutlinedAction />
-            <Avatar />
+            <Avatar src={currentUser.img} />
             {currentUser.name}
           </User>
        ) :(
