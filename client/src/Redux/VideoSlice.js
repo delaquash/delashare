@@ -10,7 +10,21 @@ export const videoSlice = createSlice({
     name: "currentUser", 
     initialState, 
     reducers: {
-      
+        loginStart:(state)=> {
+            /* Setting the loading property of the state to true. */
+            state.loading= true;
+        },
+        loginSuccess:(state,action) => {
+            state.loading = false;
+            state.currentUser = action.payload
+        },
+        loginFail: (state) => {
+            state.loading = false;
+            state.error = true
+        },
+        logOut:(state) => {
+            return initialState;
+        }
     }
 })
 
