@@ -1,4 +1,4 @@
-import React from "react";
+
 import styled from "styled-components";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import ThumbDownOffAltOutlinedIcon from "@mui/icons-material/ThumbDownOffAltOutlined";
@@ -6,6 +6,10 @@ import ReplyOutlinedIcon from "@mui/icons-material/ReplyOutlined";
 import AddTaskOutlinedIcon from "@mui/icons-material/AddTaskOutlined";
 import Comments from "../components/Comments";
 import Card from "../components/Card";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 const Container = styled.div`
   display: flex;
@@ -105,6 +109,31 @@ const Subscribe = styled.button`
 `;
 
 const Video = () => {
+  /* Destructuring the currentUser from the state.user object. */
+  const { currentUser } = useSelector((state)=> state.user)
+  const dispatch = useDispatch();
+
+  const path = useLocation().pathname.split("/")[2]
+
+  const [videos, setVideos] = useState({})
+  const [channel, setChannel] = useState({})
+
+  useEffect(() => {
+    const fetchVideos = async () => {
+      try {
+        const videoRes = await axios.get(`http://localhost:5000/api/videos/find/${path}`)
+        const channelRes = await axios.get(`http://localhost:5000/api/users/find/${videoRes._id}`)
+        console.log( 
+          // videoRes,
+           channelRes
+           );
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    fetchVideos();
+  }, [path])
+
   return (
     <Container>
       <Content>
@@ -114,9 +143,9 @@ const Video = () => {
             height="720"
             src="https://www.youtube.com/embed/k3Vfj-e1Ma4"
             title="YouTube video player"
-            frameborder="0"
+            frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
+            allowFullScreen
           ></iframe>
         </VideoWrapper>
         <Title>Test Video</Title>
@@ -157,7 +186,7 @@ const Video = () => {
         <Hr />
         <Comments/>
       </Content>
-      <Recommendation>
+      {/* <Recommendation>
         <Card type="sm"/>
         <Card type="sm"/>
         <Card type="sm"/>
@@ -171,7 +200,7 @@ const Video = () => {
         <Card type="sm"/>
         <Card type="sm"/>
         <Card type="sm"/>
-      </Recommendation>
+      </Recommendation> */}
     </Container>
   );
 };
