@@ -7,29 +7,24 @@ const initialState = {
 }
 
 export const videoSlice = createSlice({
-    name: "currentUser", 
+    name: "currentVideo", 
     initialState, 
     reducers: {
-        loginStart:(state)=> {
+        fetchStart:(state)=> {
             /* Setting the loading property of the state to true. */
             state.loading= true;
         },
-        loginSuccess:(state,action) => {
-            state.loading = false;
-            state.currentUser = action.payload
+        fetchSuccess:(state,action) => {
+            state.loading = false; 
+            state.currentVideo = action.payload
         },
-        loginFail: (state) => {
+        fetchFail: (state) => {
             state.loading = false;
             state.error = true
         },
-        logOut:(state) => {
-            state.currentUser= null;
-            state.loading= false;
-            state.error= false;
-        }
     }
 })
 
-export const { loginStart, loginFail, loginSuccess, logOut } = videoSlice.actions
+export const { fetchStart, fetchFail, fetchSuccess } = videoSlice.actions
 
 export default videoSlice.reducer;

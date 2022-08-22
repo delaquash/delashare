@@ -1,15 +1,19 @@
 
 import styled from "styled-components";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import ThumbDownOffAltOutlinedIcon from "@mui/icons-material/ThumbDownOffAltOutlined";
 import ReplyOutlinedIcon from "@mui/icons-material/ReplyOutlined";
 import AddTaskOutlinedIcon from "@mui/icons-material/AddTaskOutlined";
 import Comments from "../components/Comments";
-import Card from "../components/Card";
+// import Card from "../components/Card";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { fetchSuccess } from "../Redux/VideoSlice";
+import { format } from "timeago.js";
 
 const Container = styled.div`
   display: flex;
@@ -57,9 +61,11 @@ const Hr = styled.hr`
   border: 0.5px solid ${({ theme }) => theme.soft};
 `;
 
-const Recommendation = styled.div`
-  flex: 2;
-`;
+// const Recommendation = styled.div`
+//   flex: 2;
+// `;
+
+
 const Channel = styled.div`
   display: flex;
   justify-content: space-between;
@@ -110,7 +116,9 @@ const Subscribe = styled.button`
 
 const Video = () => {
   /* Destructuring the currentUser from the state.user object. */
-  const { currentUser } = useSelector((state)=> state.user)
+  const  currentUser  = useSelector((state)=> state.user)
+  const currentVideo  = useSelector((state)=> state.video)
+  // console.log(currentVideo)
   const dispatch = useDispatch();
 
   const path = useLocation().pathname.split("/")[2]
@@ -118,21 +126,25 @@ const Video = () => {
   const [videos, setVideos] = useState({})
   const [channel, setChannel] = useState({})
 
+  const handleLike=async () => {
+    await axios.put(`http://localhost:5000/api/users/like/${currentVideo._id}`)
+  }
+  const handleDislike=async () => {
+    await axios.put(`http://localhost:5000/api/users/dislike/${currentVideo._id}`)
+}
   useEffect(() => {
     const fetchVideos = async () => {
       try {
         const videoRes = await axios.get(`http://localhost:5000/api/videos/find/${path}`)
-        const channelRes = await axios.get(`http://localhost:5000/api/users/find/${videoRes._id}`)
-        console.log( 
-          // videoRes,
-           channelRes
-           );
+        const channelRes = await axios.get(`http://localhost:5000/api/users/find/${videoRes.data.userId}`)
+       console.log(setChannel(channelRes.data))
+       dispatch(fetchSuccess(videoRes.data))
       } catch (error) {
-        console.log(error)
+        // console.log(error)
       }
     }
     fetchVideos();
-  }, [path])
+  }, [path, dispatch])
 
   return (
     <Container>
@@ -141,22 +153,25 @@ const Video = () => {
           <iframe
             width="100%"
             height="720"
-            src="https://www.youtube.com/embed/k3Vfj-e1Ma4"
+            src={channel.img}
             title="YouTube video player"
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
           ></iframe>
         </VideoWrapper>
-        <Title>Test Video</Title>
+        <Title>{currentVideo.title}</Title>
         <Details>
-          <Info>7,948,154 views • Jun 22, 2022</Info>
+          <Info>{currentVideo.views}• {format(currentVideo.createdAt).toString()}</Info>
           <Buttons>
-            <Button>
-              <ThumbUpOutlinedIcon /> 123
+            <Button onClick={handleLike}>
+              {currentVideo.like?.includes(currentUser._id) ? <ThumbUpIcon /> : (
+              <ThumbUpOutlinedIcon />)}{""} {currentVideo.like?.length}
             </Button>
-            <Button>
-              <ThumbDownOffAltOutlinedIcon /> Dislike
+            <Button onClick={handleDislike}>
+              {currentVideo.dislike?.includes(currentUser._id)? <ThumbDownIcon /> : (  
+              <ThumbDownOffAltOutlinedIcon /> 
+              )}{""}
             </Button>
             <Button>
               <ReplyOutlinedIcon /> Share
@@ -169,15 +184,12 @@ const Video = () => {
         <Hr />
         <Channel>
           <ChannelInfo>
-            <Image src="https://yt3.ggpht.com/yti/APfAmoE-Q0ZLJ4vk3vqmV4Kwp0sbrjxLyB8Q4ZgNsiRH=s88-c-k-c0x00ffffff-no-rj-mo" />
+            <Image src={channel.img} />
             <ChannelDetail>
-              <ChannelName>Dela Dev</ChannelName>
-              <ChannelCounter>200K subscribers</ChannelCounter>
+              <ChannelName>{channel.name}</ChannelName>
+              <ChannelCounter>{channel.subscribers}</ChannelCounter>
               <Description>
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                Doloribus laborum delectus unde quaerat dolore culpa sit aliquam
-                at. Vitae facere ipsum totam ratione exercitationem. Suscipit
-                animi accusantium dolores ipsam ut.
+                {currentVideo.desc}
               </Description>
             </ChannelDetail>
           </ChannelInfo>
