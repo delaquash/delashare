@@ -128,10 +128,11 @@ const Video = () => {
 
   const handleLike=async () => {
     await axios.put(`http://localhost:5000/api/users/like/${currentVideo._id}`)
-  }
-  const handleDislike=async () => {
-    await axios.put(`http://localhost:5000/api/users/dislike/${currentVideo._id}`)
-}
+  }                                       
+                                          
+//   const handleDislike=async () => {
+//     await axios.put(`http://localhost:5000/api/users/dislike/${currentVideo._id}`)
+// }
   useEffect(() => {
     const fetchVideos = async () => {
       try {
