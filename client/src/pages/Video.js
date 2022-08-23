@@ -114,25 +114,27 @@ const Subscribe = styled.button`
   cursor: pointer;
 `;
 
-const Video = () => {
+const Video = ({_id}) => {
   /* Destructuring the currentUser from the state.user object. */
   const  currentUser  = useSelector((state)=> state.user)
   const currentVideo  = useSelector((state)=> state.video)
-  // console.log(currentVideo)
+  console.log(currentVideo)
   const dispatch = useDispatch();
 
-  const path = useLocation().pathname.split("/")[2]
+  const path = useLocation().pathname.split("/")[2];
 
   const [videos, setVideos] = useState({})
   const [channel, setChannel] = useState({})
 
-  const handleLike=async () => {
+  const handleLike= async () => {
     await axios.put(`http://localhost:5000/api/users/like/${currentVideo._id}`)
+    // dispatch(like(currentUser._id));
   }                                       
                                           
-//   const handleDislike=async () => {
-//     await axios.put(`http://localhost:5000/api/users/dislike/${currentVideo._id}`)
-// }
+  const handleDislike= async () => {
+    await axios.put(`http://localhost:5000/api/users/dislike/${currentVideo._id}`)
+    // dispatch(dislike(currentUser._id));
+  }
   useEffect(() => {
     const fetchVideos = async () => {
       try {

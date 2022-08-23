@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { STATES } from "mongoose";
 
 const initialState = {
     currentUser: null,
@@ -7,7 +8,7 @@ const initialState = {
 }
 
 export const videoSlice = createSlice({
-    name: "currentVideo", 
+    name: "video", 
     initialState, 
     reducers: {
         fetchStart:(state)=> {
@@ -22,6 +23,11 @@ export const videoSlice = createSlice({
             state.loading = false;
             state.error = true
         },
+        like: (state, action)=> {
+            if(!STATES.currentVideo.likes.includes(action.payload)){
+                
+            }
+        }
     }
 })
 
