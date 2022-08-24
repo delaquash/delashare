@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { fetchSuccess } from "../Redux/VideoSlice";
+import { dislike, fetchSuccess, like } from "../Redux/VideoSlice";
 import { format } from "timeago.js";
 
 const Container = styled.div`
@@ -127,13 +127,13 @@ const Video = ({_id}) => {
   const [channel, setChannel] = useState({})
 
   const handleLike= async () => {
-    await axios.put(`http://localhost:5000/api/users/like/${currentVideo._id}`)
-    // dispatch(like(currentUser._id));
+    await axios.put(`http://localhost:5000/api/users/like/${currentVideo.id}`)
+    dispatch(like(currentUser._id));
   }                                       
                                           
   const handleDislike= async () => {
     await axios.put(`http://localhost:5000/api/users/dislike/${currentVideo._id}`)
-    // dispatch(dislike(currentUser._id));
+    dispatch(dislike(currentUser._id));
   }
   useEffect(() => {
     const fetchVideos = async () => {
@@ -196,7 +196,11 @@ const Video = ({_id}) => {
               </Description>
             </ChannelDetail>
           </ChannelInfo>
-          <Subscribe>SUBSCRIBE</Subscribe>
+          <Subscribe>
+            {currentUser.SubscribedUser?.includes(channel._id) 
+            ? "SUBSCRIBED"
+            : "SUBSCRIBE"}
+          </Subscribe>
         </Channel>
         <Hr />
         <Comments/>

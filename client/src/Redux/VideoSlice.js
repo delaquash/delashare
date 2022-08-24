@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { STATES } from "mongoose";
 
 const initialState = {
     currentUser: null,
@@ -24,13 +23,28 @@ export const videoSlice = createSlice({
             state.error = true
         },
         like: (state, action)=> {
-            if(!STATES.currentVideo.likes.includes(action.payload)){
-                
+            if(!state.currentVideo.like.includes(action.payload)){
+                state.currentVideo.like.push(action.payload);
+                state.currentVideo.dislike.splice(
+                    state.currentVideo.dislike.findIndex(
+                        (userId)=> userId === action.payload
+                    )
+                )
+            }
+        },
+        dislike: (state, action) => {
+            if(!state.currentVideo.dislike.includes(action.payload)){
+                state.currentVideo.dislike.push(action.payload);
+                state.currentVideo.like.splice(
+                    state.currentVideo.like.findIndex(
+                        (userId)=> userId === action.payload
+                    )
+                )
             }
         }
     }
 })
 
-export const { fetchStart, fetchFail, fetchSuccess } = videoSlice.actions
+export const { fetchStart, fetchFail, fetchSuccess, like, dislike } = videoSlice.actions
 
 export default videoSlice.reducer;
