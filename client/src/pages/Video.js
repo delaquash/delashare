@@ -14,6 +14,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { dislike, fetchSuccess, like } from "../Redux/VideoSlice";
 import { format } from "timeago.js";
+import { subscription } from "../Redux/userSlice";
 
 const Container = styled.div`
   display: flex;
@@ -135,6 +136,14 @@ const Video = ({_id}) => {
     await axios.put(`http://localhost:5000/api/users/dislike/${currentVideo._id}`)
     dispatch(dislike(currentUser._id));
   }
+
+  const handleSub = async () => {
+    currentUser.subscribedUser.includes(channel._id) 
+    ? await axios.put(`http://localhost:5000/api/user/unsub/${channel._id}`)
+    : await axios.put(`http://localhost:5000/api/user/sub/${channel._id}`)
+    dispatch(subscription(channel._id))
+  }
+
   useEffect(() => {
     const fetchVideos = async () => {
       try {
@@ -196,7 +205,7 @@ const Video = ({_id}) => {
               </Description>
             </ChannelDetail>
           </ChannelInfo>
-          <Subscribe>
+          <Subscribe onClick={handleSub}>
             {currentUser.SubscribedUser?.includes(channel._id) 
             ? "SUBSCRIBED"
             : "SUBSCRIBE"}

@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+// import { STATES } from "mongoose";
 
 const initialState = {
     currentUser: null,
@@ -26,9 +27,24 @@ export const userSlice = createSlice({
             state.currentUser= null;
             state.loading= false;
             state.error= false;
-        }
+        },
+        subscription: (state, action) =>  {
+            if(state.currentUser.subscribedUser.includes(action.payload)){
+                state.currentUser.subscribedUser.splice(
+                state.currentUser.subscribedUser.fndIndex(
+                    (channelId)=> channelId=== action.payload
+                ),
+                1
+              )
+            } else {
+                state.currentUser.subscribedUser.push(action.payload)
+            }
+        },
+        // unsubscription: (state, action) => {
+        //     if(state.currentUser)
+        // }
     }
 })
 
-export const { loginStart, loginFail, loginSuccess, logOut } = userSlice.actions;
+export const { loginStart, loginFail, loginSuccess, logOut, subscription } = userSlice.actions;
 export default userSlice.reducer
