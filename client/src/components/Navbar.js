@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
@@ -72,8 +72,10 @@ const Button = styled.button`
   gap: 5px;
 `;
 const Navbar = () => {
+  const [open, setOpen ] = useState(false)
   const { currentUser } = useSelector(state => state.user )
   return (
+    <>
     <Container>
       <Wrapper>
         <Search>
@@ -82,7 +84,7 @@ const Navbar = () => {
         </Search>
        { currentUser ? (
           <User>
-            <VideoCallOutlinedAction />
+            <VideoCallOutlinedAction onClick={} />
             <Avatar src={currentUser.img} />
             {currentUser.name}
           </User>
@@ -95,6 +97,8 @@ const Navbar = () => {
         </Link>)}
       </Wrapper>
     </Container>
+    </>
+    {open && }
   );
 };
 

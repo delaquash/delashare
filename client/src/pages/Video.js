@@ -115,62 +115,62 @@ const Subscribe = styled.button`
   cursor: pointer;
 `;
 
-const Video = ({_id}) => {
+const VideoFrame = styled.div`
+  width: 100%;
+  object-fit: cover;
+  max-height: 720px;
+`;
+
+
+
+function Video() {
   /* Destructuring the currentUser from the state.user object. */
-  const  currentUser  = useSelector((state)=> state.user)
-  const currentVideo  = useSelector((state)=> state.video)
-  console.log(currentVideo)
+  const currentUser = useSelector((state) => state.user);
+  const currentVideo = useSelector((state) => state.video);
+  console.log(currentVideo);
   const dispatch = useDispatch();
 
   const path = useLocation().pathname.split("/")[2];
 
-  const [videos, setVideos] = useState({})
-  const [channel, setChannel] = useState({})
+  const [videos, setVideos] = useState({});
+  const [channel, setChannel] = useState({});
 
-  const handleLike= async () => {
-    await axios.put(`http://localhost:5000/api/users/like/${currentVideo.id}`)
+  const handleLike = async () => {
+    await axios.put(`http://localhost:5000/api/users/like/${currentVideo.id}`);
     dispatch(like(currentUser._id));
-  }                                       
-                                          
-  const handleDislike= async () => {
-    await axios.put(`http://localhost:5000/api/users/dislike/${currentVideo._id}`)
+  };
+
+  const handleDislike = async () => {
+    await axios.put(`http://localhost:5000/api/users/dislike/${currentVideo._id}`);
     dispatch(dislike(currentUser._id));
-  }
+  };
 
   const handleSub = async () => {
-    currentUser.subscribedUser.includes(channel._id) 
-    ? await axios.put(`http://localhost:5000/api/user/unsub/${channel._id}`)
-    : await axios.put(`http://localhost:5000/api/user/sub/${channel._id}`)
-    dispatch(subscription(channel._id))
-  }
+    currentUser.subscribedUser.includes(channel._id)
+      ? await axios.put(`http://localhost:5000/api/user/unsub/${channel._id}`)
+      : await axios.put(`http://localhost:5000/api/user/sub/${channel._id}`);
+    dispatch(subscription(channel._id));
+  };
 
   useEffect(() => {
     const fetchVideos = async () => {
       try {
-        const videoRes = await axios.get(`http://localhost:5000/api/videos/find/${path}`)
-        const channelRes = await axios.get(`http://localhost:5000/api/users/find/${videoRes.data.userId}`)
-       console.log(setChannel(channelRes.data))
-       dispatch(fetchSuccess(videoRes.data))
+        const videoRes = await axios.get(`http://localhost:5000/api/videos/find/${path}`);
+        const channelRes = await axios.get(`http://localhost:5000/api/users/find/${videoRes.data.userId}`);
+        console.log(setChannel(channelRes.data));
+        dispatch(fetchSuccess(videoRes.data));
       } catch (error) {
         // console.log(error)
       }
-    }
+    };
     fetchVideos();
-  }, [path, dispatch])
+  }, [path, dispatch]);
 
   return (
     <Container>
       <Content>
         <VideoWrapper>
-          <iframe
-            width="100%"
-            height="720"
-            src={channel.img}
-            title="YouTube video player"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          ></iframe>
+          <VideoFrame src={currentVideo.videoUrl} />
         </VideoWrapper>
         <Title>{currentVideo.title}</Title>
         <Details>
@@ -178,11 +178,11 @@ const Video = ({_id}) => {
           <Buttons>
             <Button onClick={handleLike}>
               {currentVideo.like?.includes(currentUser._id) ? <ThumbUpIcon /> : (
-              <ThumbUpOutlinedIcon />)}{""} {currentVideo.like?.length}
+                <ThumbUpOutlinedIcon />)}{""} {currentVideo.like?.length}
             </Button>
             <Button onClick={handleDislike}>
-              {currentVideo.dislike?.includes(currentUser._id)? <ThumbDownIcon /> : (  
-              <ThumbDownOffAltOutlinedIcon /> 
+              {currentVideo.dislike?.includes(currentUser._id) ? <ThumbDownIcon /> : (
+                <ThumbDownOffAltOutlinedIcon />
               )}{""}
             </Button>
             <Button>
@@ -206,31 +206,31 @@ const Video = ({_id}) => {
             </ChannelDetail>
           </ChannelInfo>
           <Subscribe onClick={handleSub}>
-            {currentUser.SubscribedUser?.includes(channel._id) 
-            ? "SUBSCRIBED"
-            : "SUBSCRIBE"}
+            {currentUser.SubscribedUser?.includes(channel._id)
+              ? "SUBSCRIBED"
+              : "SUBSCRIBE"}
           </Subscribe>
         </Channel>
         <Hr />
-        <Comments/>
+        <Comments videoId={currentVideo._id} />
       </Content>
       {/* <Recommendation>
-        <Card type="sm"/>
-        <Card type="sm"/>
-        <Card type="sm"/>
-        <Card type="sm"/>
-        <Card type="sm"/>
-        <Card type="sm"/>
-        <Card type="sm"/>
-        <Card type="sm"/>
-        <Card type="sm"/>
-        <Card type="sm"/>
-        <Card type="sm"/>
-        <Card type="sm"/>
-        <Card type="sm"/>
-      </Recommendation> */}
+              <Card type="sm"/>
+              <Card type="sm"/>
+              <Card type="sm"/>
+              <Card type="sm"/>
+              <Card type="sm"/>
+              <Card type="sm"/>
+              <Card type="sm"/>
+              <Card type="sm"/>
+              <Card type="sm"/>
+              <Card type="sm"/>
+              <Card type="sm"/>
+              <Card type="sm"/>
+              <Card type="sm"/>
+            </Recommendation> */}
     </Container>
   );
-};
+}
 
 export default Video;
