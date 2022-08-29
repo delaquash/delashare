@@ -1,4 +1,6 @@
 import React from 'react'
+import { useEffect } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 
 const Container = styled.div`
@@ -63,18 +65,57 @@ const Label = styled.label`
 `;
 
 const Upload = ({setOpen}) => {
+    const [ img, setImg ] = useState(undefined)
+    const [ vid, setVid ] = useState(undefined)
+    const [ imgPercentage, setImgPrcentage] = useState(0)
+    const [ vidPercentage, setVidPercentage ] = useState(0)
+    const [ title, setTitle ] = useState("")
+    const [ desc, setDesc ] = useState("")
+    const [ tags, setTags ] = useState([])
+
+const handleTags = (e) => {
+    setTags(e.target.value.split(","));
+}
+
+const uploadFile=() => {
+
+}
+
+useEffect(() => {
+    uploadFile(vid)
+}, [vid])
+
+useEffect(() => {
+    uploadFile(img)
+}, [img])
+
+
   return (
     <Container>
         <Wrapper>
             <Close onClick={()=>setOpen(false)}>X</Close>
             <Title>Upload New Video</Title>
             <Label>Video:</Label>
-            <Input type="file" accept="video/*" />
-            <Input type="text" placeholder="Title" />
-            <Description  rows={8} />  
+            <Input 
+                type="file" 
+                onChange={(e) =>setVid(e.target.files[0])}
+                accept="video/*" />
+            <Input 
+                type="text" 
+                onChange={(e)=> setTitle(e.target.value)}
+                placeholder="Title" />
+            <Description  
+                onChange={(e)=> setDesc(e.target.value)}
+                rows={8} />  
             <Label>Image:</Label>
-            <Input type="text" placeholder="Sepatate tags with commas" />
-            <Input type="file" accept="image/*" />
+            <Input type="text" 
+                placeholder="Separate tags with commas"
+                onClick={handleTags} 
+            />
+            <Input 
+                type="file"
+                onChange={(e)=> setImg(e.target.files[0])} 
+                accept="image/*" />
             <Button>Upload</Button>
         </Wrapper>
     </Container>
