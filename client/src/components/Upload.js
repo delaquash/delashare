@@ -30,7 +30,36 @@ const Close = styled.button`
     right: 10px;
 `;
 const Title = styled.h1`
-    
+    text-align: center;
+`;
+
+const Input = styled.input`
+    border: 1px solid ${({ theme })=> theme.soft};
+    color: ${({ theme }) => theme.text};
+    background-color: transparent;
+    border-radius: 3px;
+    padding: 10px;
+`;
+const Description = styled.textarea`
+    border: 1px solid ${({ theme })=> theme.soft};
+    color: ${({ theme }) => theme.text};
+    background-color: transparent;
+    border-radius: 3px;
+    padding: 10px;
+`;
+
+const Button = styled.button`
+    padding: 10px 20px;
+    border-radius: 3px;
+    border: none;
+    font-weight: 500;
+    cursor: pointer;
+    background-color: ${({theme}) => theme.soft};
+    color: ${({theme}) => theme.textSoft};
+`;
+
+const Label = styled.label`
+    font-size: 15px;
 `;
 
 const Upload = ({setOpen}) => {
@@ -38,7 +67,15 @@ const Upload = ({setOpen}) => {
     <Container>
         <Wrapper>
             <Close onClick={()=>setOpen(false)}>X</Close>
-            <Title>Upload</Title>
+            <Title>Upload New Video</Title>
+            <Label>Video:</Label>
+            <Input type="file" accept="video/*" />
+            <Input type="text" placeholder="Title" />
+            <Description  rows={8} />  
+            <Label>Image:</Label>
+            <Input type="text" placeholder="Sepatate tags with commas" />
+            <Input type="file" accept="image/*" />
+            <Button>Upload</Button>
         </Wrapper>
     </Container>
   )
