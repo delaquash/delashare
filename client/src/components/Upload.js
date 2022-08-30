@@ -70,17 +70,56 @@ const Upload = ({setOpen}) => {
     const [ vid, setVid ] = useState(undefined)
     const [ imgPercentage, setImgPrcentage] = useState(0)
     const [ vidPercentage, setVidPercentage ] = useState(0)
-    const [ title, setTitle ] = useState("")
-    const [ desc, setDesc ] = useState("")
+    const [ input, setInput ] = useState({})
+    // const [ desc, setDesc ] = useState("")
     const [ tags, setTags ] = useState([])
+
+const handleInputChange =(e)=> {
+   /* A function that takes the previous state and returns a new state. */
+    setInput((prev) => {
+        return {...prev, [e.target.name]: e.target.value}
+    })
+}    
 
 const handleTags = (e) => {
     setTags(e.target.value.split(","));
 }
 
-const uploadFile=() => {
+const uploadFile=(file, urlType) => {
     const storage = getStorage();
+    const fileName = new Date().getTime() + file.name
+    // Upload file and metadata to the object 'images/mountains.jpg'
+    const storageRef = ref(storage + fileName)
+    const uploadTask = uploadBytesResumable(storageRef, file);
+    uploadTask.on('state_changed',
+        (snapshot) => {
+            // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            urlType === "imgUrl" ? setImgPrcentage(progress) : setVidPercentage(progress) 
+            switch (snapshot.state) {
+            case 'paused':
+                console.log('Upload is paused');
+                break;
+            case 'running':
+                console.log('Upload is running');
+                break;
+                default:
+                break;
+            }
+        }, 
+        (error) => {},
+        () => {
+            // Upload completed successfully, now we can get the download URL
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                setInput((prev) => {
+                    return {...prev, urlType: downloadURL}
+                })
+            });
+          }
+    )
 }
+
+
 
 useEffect(() => {
     uploadFile(vid)
@@ -97,26 +136,35 @@ useEffect(() => {
             <Close onClick={()=>setOpen(false)}>X</Close>
             <Title>Upload New Video</Title>
             <Label>Video:</Label>
-            <Input 
+            {vidPercentage > 0 ? (
+                "Uploading" + vidPercentage
+            ): (
+                <Input 
                 type="file" 
                 onChange={(e) =>setVid(e.target.files[0])}
                 accept="video/*" />
+            )}
             <Input 
-                type="text" 
-                onChange={(e)=> setTitle(e.target.value)}
+                type="text"
+                name="title" 
+                onChange={handleInputChange}
                 placeholder="Title" />
-            <Description  
-                onChange={(e)=> setDesc(e.target.value)}
-                rows={8} />  
-            <Label>Image:</Label>
+            <Description
+                placeholder='Description....'
+                name="description"  
+                onChange={handleInputChange}
+                rows={8} />   
             <Input type="text" 
                 placeholder="Separate tags with commas"
                 onClick={handleTags} 
             />
-            <Input 
+            <Label>Image:</Label>
+            {vidPercentage > 0 ? (
+                "Uploading" + imgPercentage
+            ): <Input 
                 type="file"
                 onChange={(e)=> setImg(e.target.files[0])} 
-                accept="image/*" />
+                accept="image/*" />}
             <Button>Upload</Button>
         </Wrapper>
     </Container>
