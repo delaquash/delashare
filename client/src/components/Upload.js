@@ -2,6 +2,7 @@ import React from 'react'
 import { useEffect } from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 const Container = styled.div`
     height: 100%;
@@ -78,7 +79,7 @@ const handleTags = (e) => {
 }
 
 const uploadFile=() => {
-
+    const storage = getStorage();
 }
 
 useEffect(() => {
