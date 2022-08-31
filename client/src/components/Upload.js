@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import app from '../firebase';
 
 const Container = styled.div`
     height: 100%;
@@ -86,10 +87,10 @@ const handleTags = (e) => {
 }
 
 const uploadFile=(file, urlType) => {
-    const storage = getStorage();
+    const storage = getStorage(app);
     const fileName = new Date().getTime() + file.name
     // Upload file and metadata to the object 'images/mountains.jpg'
-    const storageRef = ref(storage + fileName)
+    const storageRef = ref(storage, fileName)
     const uploadTask = uploadBytesResumable(storageRef, file);
     uploadTask.on('state_changed',
         (snapshot) => {
@@ -107,12 +108,14 @@ const uploadFile=(file, urlType) => {
                 break;
             }
         }, 
-        (error) => {},
+        (error) => {
+            console.log(error);
+        },
         () => {
             // Upload completed successfully, now we can get the download URL
             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
                 setInput((prev) => {
-                    return {...prev, urlType: downloadURL}
+                    return {...prev, [urlType]: downloadURL}
                 })
             });
           }
@@ -122,11 +125,11 @@ const uploadFile=(file, urlType) => {
 
 
 useEffect(() => {
-    uploadFile(vid)
+   vid && uploadFile(vid, "vidUrl")
 }, [vid])
 
 useEffect(() => {
-    uploadFile(img)
+    img && uploadFile(img, "imgUrl")
 }, [img])
 
 
@@ -137,12 +140,12 @@ useEffect(() => {
             <Title>Upload New Video</Title>
             <Label>Video:</Label>
             {vidPercentage > 0 ? (
-                "Uploading" + vidPercentage
+                "Uploading" + vidPercentage + "%"
             ): (
                 <Input 
                 type="file" 
                 onChange={(e) =>setVid(e.target.files[0])}
-                accept="video/*" />
+                accept="vid/*" />
             )}
             <Input 
                 type="text"
@@ -153,18 +156,19 @@ useEffect(() => {
                 placeholder='Description....'
                 name="description"  
                 onChange={handleInputChange}
-                rows={8} />   
+                rows={8} /> 
             <Input type="text" 
                 placeholder="Separate tags with commas"
                 onClick={handleTags} 
             />
             <Label>Image:</Label>
-            {vidPercentage > 0 ? (
-                "Uploading" + imgPercentage
+            {imgPercentage > 0 ? (
+                "Uploading" + imgPercentage + "%"
             ): <Input 
                 type="file"
                 onChange={(e)=> setImg(e.target.files[0])} 
-                accept="image/*" />}
+                accept="image/*" />
+            }
             <Button>Upload</Button>
         </Wrapper>
     </Container>
