@@ -1,10 +1,9 @@
-
 import React, { useState } from "react";
 import styled from "styled-components";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import VideoCallOutlinedAction from "@mui/icons-material/VideoCallOutlined";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Upload from "./Upload";
 
@@ -75,14 +74,21 @@ const Button = styled.button`
 `;
 const Navbar = () => {
   const [open, setOpen ] = useState(false)
-  const { currentUser } = useSelector(state => state.user )
+  const [ query, setQuery ] = useState("false")
+  const { currentUser } = useSelector(state => state.user );
+  const navigate = useNavigate()
   return (
     <>
       <Container>
         <Wrapper>
-          <Search>
-            <Input placeholder="Search" />
-            <SearchOutlinedIcon />
+          <Search >
+            <Input 
+                placeholder="Search"
+                onChange={(e) => setQuery(e.target.value)}
+            />
+            <SearchOutlinedIcon 
+                onClick={()=> navigate(`/search?query=${query}`)}
+            />
           </Search>
         { currentUser ? (
             <User>
