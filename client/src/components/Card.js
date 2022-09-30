@@ -53,7 +53,7 @@ const Info = styled.div`
   color: ${({ theme }) => theme.textSoft};
 `;
 
-const Card = ({ type, video, id }) => {
+const Card = ({ type, video }) => {
   const [ channel, setChannel ] = useState({});
   // const URL = ""
 
